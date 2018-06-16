@@ -15,7 +15,8 @@ public class JavaApplication20 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Different)");
+        System.out.println("Different test");
     }
-    
+    public static void newMethod(){
+    }
 }
