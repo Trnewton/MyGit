@@ -27,7 +27,8 @@ public class hw4 {
         String option = null;
         String maze_file = null;
         String query_file = null;
-        MazeVisualizer visual;
+        Vertex[] vertices;
+        MazeVisualizer visual = null;
         try {
             option = args[0];
             maze_file = args[1];
@@ -38,13 +39,24 @@ public class hw4 {
             System.out.println(e.getMessage());
             System.exit(0);
         }
+        System.out.println(maze_file +" "+option);
+        vertices = readMaze(maze_file, option, visual);
+    }
+
+    private static Vertex[] readMaze(String maze_file, String option, MazeVisualizer visual) {
+        int vals = option.equals("unweighted") ? 2:3;
+        Vertex[] vertices = null;
         try {
-            System.out.println(maze_file);
             BufferedReader input_maze = new BufferedReader(new FileReader(maze_file));
             String line = input_maze.readLine();
             String[] words = line.split(" ");
             int n = Integer.parseInt(words[0]);
             visual = new MazeVisualizer(n);
+            n = (int) Math.pow(n, 2);
+            vertices = new Vertex[n];
+            for (int i = 0; i < n; i++) {
+                vertices[i] = new Vertex(i);
+            }
             //<editor-fold defaultstate="collapsed" desc="Window Init">
             JFrame f = new JFrame("MazeVisualizer");
             f.addWindowListener(new WindowAdapter() {
@@ -62,13 +74,19 @@ public class hw4 {
             line = input_maze.readLine();
             while (line != null) {
                 words = line.split("\t");
-                visual.addEdge(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
+                int from, to, weight;
+                from = Integer.parseInt(words[0]);
+                to = Integer.parseInt(words[1]);
+                weight = Integer.parseInt(words[2]);
+                visual.addEdge(from, to);
+                vertices[from-1].addAdj(to, weight);
                 line = input_maze.readLine();
             }
         } catch (Exception e) {
-            System.out.println("ERROR:File Reader " + e.getMessage());
+            System.out.println("ERROR:File Reader " + e.toString());
+            System.exit(0);
         }
-
+        return(vertices);
     }
 
 }
