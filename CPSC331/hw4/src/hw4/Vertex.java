@@ -5,8 +5,6 @@
  */
 package hw4;
 
-import java.util.List;
-
 /**
  *
  * @author thomasnewton
@@ -14,7 +12,7 @@ import java.util.List;
 public class Vertex {
     int id;
     int[][] adjacent = new int[4][];
-    private int count = 0;
+    int count = 0;
 
     public Vertex(int initID){
         id = initID;

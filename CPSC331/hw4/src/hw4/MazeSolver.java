@@ -5,6 +5,9 @@
  */
 package hw4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author thomasnewton
@@ -20,7 +23,8 @@ public class MazeSolver {
         vertices = initVertices;
     }
 
-    public void dijkstraSolve(int from, int to) {
+    public List<Integer> dijkstraSolve(int from, int to) {
+        List<List<Integer>> paths;
         distArray = new double[vertices.length];
         queue = new Vertex[vertices.length];
         count = 0;
@@ -30,6 +34,24 @@ public class MazeSolver {
             enqueue(copy, Double.POSITIVE_INFINITY);
         }
         distArray[from - 1] = 0;
+        heapify();
+        paths = new ArrayList<>(count);
+
+        Vertex u;
+        while (count > 0) {
+            u = dequeue();
+            int[] v;
+            for (int i = 0; i < u.id; i++) {
+                v = u.adjacent[i];
+                if(distArray[v[0]] > getDist(u) + v[1]){
+                    distArray[v[0]] = getDist(u) + v[1];
+                    List<Integer> path = paths.get(v[0]);
+                    path.add(u.id);
+                }
+            }
+        }
+
+        return (paths.get(to));
     }
 
     private double getDist(Vertex vertex) {
