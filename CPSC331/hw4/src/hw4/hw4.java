@@ -19,16 +19,16 @@ import javax.swing.JFrame;
  * @author thomasnewton
  */
 public class hw4 {
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        MazeSolver solver;
+        MazeVisualizer visual = null;
         String option = null;
         String maze_file = null;
-        String query_file = null;
-        Vertex[] vertices;
-        MazeVisualizer visual = null;
+        String query_file;
+        
         try {
             option = args[0];
             maze_file = args[1];
@@ -36,18 +36,18 @@ public class hw4 {
         } catch (Exception e) {
             System.out.println("ERROR: Invalid calling. \n Usage: java HW4 "
                     + "[option] maze-file query-file");
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
             System.exit(0);
         }
-        System.out.println(maze_file +" "+option);
-        vertices = readMaze(maze_file, option, visual);
+        solver = new MazeSolver(readMaze(maze_file, visual));
+        
     }
 
-    private static Vertex[] readMaze(String maze_file, String option, MazeVisualizer visual) {
-        int vals = option.equals("unweighted") ? 2:3;
+    private static Vertex[] readMaze(String maze_file, MazeVisualizer visual) {
         Vertex[] vertices = null;
+        BufferedReader input_maze = null;
         try {
-            BufferedReader input_maze = new BufferedReader(new FileReader(maze_file));
+            input_maze = new BufferedReader(new FileReader(maze_file));
             String line = input_maze.readLine();
             String[] words = line.split(" ");
             int n = Integer.parseInt(words[0]);
@@ -71,6 +71,7 @@ public class hw4 {
             f.setSize(new Dimension(512, 512));
             f.setVisible(true);
 //</editor-fold>
+
             line = input_maze.readLine();
             while (line != null) {
                 words = line.split("\t");
@@ -83,10 +84,20 @@ public class hw4 {
                 line = input_maze.readLine();
             }
         } catch (Exception e) {
-            System.out.println("ERROR:File Reader " + e.toString());
+            System.out.println("ERROR:File Reader \n" + e.toString());
             System.exit(0);
+        } finally {
+            if(input_maze != null){
+                try {
+                    input_maze.close();
+                } catch (Exception e) {
+                    System.out.println("ERROR:Problem closing file \n" + e.toString());
+                    System.exit(0);
+                }
+            }
         }
         return(vertices);
     }
 
+    
 }
