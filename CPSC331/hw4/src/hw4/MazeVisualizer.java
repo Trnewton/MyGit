@@ -194,7 +194,7 @@ public class MazeVisualizer extends JApplet {
         
         // add some paths to be visualized
         
-        
+        /*
         applet.addPath( new     LinkedList<Integer>(Arrays.asList(6,10,11)));
         applet.addPath( new     LinkedList<Integer>(Arrays.asList(11,15,16)));
 
@@ -203,7 +203,7 @@ public class MazeVisualizer extends JApplet {
         applet.addPath( new LinkedList<Integer>(Arrays.asList(9,13,14)));
 
         applet.addPath( new LinkedList<Integer>(Arrays.asList(8,12,11)));
-        
+        */
         
         f.getContentPane().add("Center", applet);
         applet.init();
