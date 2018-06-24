@@ -24,6 +24,7 @@ public class Vertex {
         id = copy.id;
         adjacent = copy.adjacent;
     }
+    
     public void addAdj(int vertexID, int weight){
         int[] array = new int[2];
         array[0] = vertexID;
