@@ -61,10 +61,15 @@ public class hw4 {
                 from = Integer.parseInt(words[0]);
                 to = Integer.parseInt(words[1]);
                 List<Integer> list = solver.dijkstraSolve(from, to);
-                for(Integer val: list){
-                System.out.println(val+1);
+                for (int i = 0; i < list.size(); i++) {
+                    list.set(i, list.get(i) + 1);
                 }
-                System.out.println();
+                System.out.print("Path from " + from + " to " + to + ": ");
+                if (list.size() == 1 && from != to) {
+                    System.out.println("No path found");
+                } else {
+                    System.out.println(list);
+                }
                 visual.addPath(list);
                 line = input_query.readLine();
             }

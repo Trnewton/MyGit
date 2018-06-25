@@ -17,25 +17,25 @@ import java.util.logging.Logger;
  * @author thomasnewton
  */
 public class MazeSolver {
-    
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         MazeSolver solver = new MazeSolver(16);
-        for(int i=0; i<16;i++){
-            solver.enqueue(new Vertex(i),16-i);
+        for (int i = 0; i < 16; i++) {
+            solver.enqueue(new Vertex(i), 16 - i);
         }
         solver.printQ();
         System.out.println("\n");
         solver.printHeap();
         System.out.println("\n");
         System.out.println(solver.count);
-        
+
         Vertex v = solver.dequeue();
         System.out.println(v.id);
         solver.printQ();
         System.out.println("\n");
         solver.printHeap();
-        System.out.println(solver.count);  
-        
+        System.out.println(solver.count);
+
         System.out.println("\n");
         solver.distArray[6] = 0;
         solver.heapify();
@@ -43,10 +43,12 @@ public class MazeSolver {
         System.out.println("\n");
         solver.printHeap();
         System.out.println(solver.count);
-        
+
+        System.out.println("IMPORTANT STUFF");
+        solver.dequeue();
         Random rand = new Random();
-        for(int i = 0; i<16;i++){
-            solver.distArray[i] = rand.nextInt()%32;
+        for (int i = 0; i < 16; i++) {
+            solver.distArray[i] = rand.nextInt() % 32;
         }
         solver.printHeap();
         solver.printQ();
@@ -61,12 +63,12 @@ public class MazeSolver {
     private Vertex[] queue;
     private int count;
 
-    public MazeSolver(int length){
+    public MazeSolver(int length) {
         count = 0;
         distArray = new double[length];
         queue = new Vertex[length];
     }
-    
+
     public MazeSolver(Vertex[] initVertices) {
         vertices = initVertices;
         count = 0;
@@ -91,19 +93,27 @@ public class MazeSolver {
         }
 
         Vertex u;
+        int n= 0;
         while (count > 0) {
+            n++;
             u = dequeue();
             int[] v;
             for (int i = 0; i < u.count; i++) {
+
                 v = u.adjacent[i];
-                if (distArray[v[0]] > getDist(u) + v[1]) {
+                if (distArray[v[0]] > (getDist(u) + v[1])) {
                     distArray[v[0]] = getDist(u) + v[1];
                     List<Integer> path = paths.get(v[0]);
+                    path.clear();
+                    path.addAll(paths.get(u.id));
                     path.add(u.id);
-                    paths.add(v[0], path);
                 }
             }
             heapify();
+        }
+        for (int i = 0; i < paths.size(); i++) {
+            List<Integer> path = paths.get(i);
+            path.add(i);
         }
         return (paths.get(to - 1));
     }
@@ -164,8 +174,8 @@ public class MazeSolver {
     }
 
     private void heapify() {
-        int lastNonLeaf = ((count-1) / 2) - 1;
-        if ((lastNonLeaf % 2 == 0) && (lastNonLeaf > 0)) {
+        int lastNonLeaf = (count / 2) - 1;
+        if ((count % 2 == 0) && (lastNonLeaf > 0)) {
             double nodeDist = getDist(queue[lastNonLeaf]);
             double childDist = getDist(queue[(2 * lastNonLeaf) + 1]);
             if (nodeDist > childDist) {
@@ -176,37 +186,40 @@ public class MazeSolver {
             lastNonLeaf--;
         }
         for (int i = lastNonLeaf; i > -1; i--) {
-            double lChildDist = getDist(queue[(2 * i) + 1]);
-            double rChildDist = getDist(queue[(2 * i) + 2]);
-            double nodeDist = getDist(queue[i]);
+            int n = i;
+            while (n <= lastNonLeaf) {
+                double lChildDist = getDist(queue[(2 * n) + 1]);
+                double rChildDist = getDist(queue[(2 * n) + 2]);
+                double nodeDist = getDist(queue[n]);
+                int litChildPos = (lChildDist < rChildDist) ? (2 * n) + 1 : (2 * n) + 2;
+                double litChildDist = getDist(queue[litChildPos]);
 
-            if (nodeDist > lChildDist) {
-                Vertex temp = queue[i];
-                queue[i] = queue[(2 * i) + 1];
-                queue[(2 * i) + 1] = temp;
-                nodeDist = getDist(queue[i]);
+                if (nodeDist > litChildDist) {
+                    Vertex temp = queue[n];
+                    queue[n] = queue[litChildPos];
+                    queue[litChildPos] = temp;
+                    n = litChildPos;
+                } else {
+                    break;
+                }
             }
-
-            if (nodeDist > rChildDist) {
-                Vertex temp = queue[i];
-                queue[i] = queue[(2 * i) + 2];
-                queue[(2 * i) + 2] = temp;
-            }
+            //printHeap();
         }
     }
-    
-    private void printQ(){
-        for(Vertex v:queue){
-            System.out.print(distArray[v.id]+", ");
+
+    private void printQ() {
+        for (Vertex v : queue) {
+            System.out.print(distArray[v.id] + ", ");
         }
         System.out.println();
     }
-    private void printHeap(){
-        int n = 0; 
-        for(int i=1; i<count;i = i*2){
+
+    private void printHeap() {
+        int n = 0;
+        for (int i = 1; i < count; i = i * 2) {
             int j = 0;
-            while(n<count && j<i){
-                System.out.print(distArray[queue[n].id]+", ");
+            while (n < count && j < i) {
+                System.out.print(distArray[queue[n].id] + ", ");
                 n++;
                 j++;
             }
