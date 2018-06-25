@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hw4;
 
 import java.awt.Color;
@@ -12,11 +7,11 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 
 /**
- *
+ * Main file for the application, takes the command line arguments and makes sure
+ * they're valid before operating on them. 
  * @author thomasnewton
  */
 public class hw4 {
@@ -60,7 +55,7 @@ public class hw4 {
                 int from, to;
                 from = Integer.parseInt(words[0]);
                 to = Integer.parseInt(words[1]);
-                List<Integer> list = solver.dijkstraSolve(from, to);
+                List<Integer> list = solver.dijkstraSolve(from, to, option);
                 for (int i = 0; i < list.size(); i++) {
                     list.set(i, list.get(i) + 1);
                 }

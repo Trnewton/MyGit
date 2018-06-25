@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hw4;
 
 /**
@@ -22,6 +17,12 @@ public class Vertex {
         id = copy.id;
         adjacent = copy.adjacent;
         count = copy.count;
+    }
+    
+    public void setWeights(int newWeight){
+        for(int i = 0; i < count;i++){
+            adjacent[i][1] = newWeight;
+        }
     }
     
     public void addAdj(int vertexID, int weight){

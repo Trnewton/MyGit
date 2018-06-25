@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hw4;
 
 import java.util.ArrayList;
@@ -17,47 +12,6 @@ import java.util.logging.Logger;
  * @author thomasnewton
  */
 public class MazeSolver {
-
-    public static void main(String[] args) {
-        MazeSolver solver = new MazeSolver(16);
-        for (int i = 0; i < 16; i++) {
-            solver.enqueue(new Vertex(i), 16 - i);
-        }
-        solver.printQ();
-        System.out.println("\n");
-        solver.printHeap();
-        System.out.println("\n");
-        System.out.println(solver.count);
-
-        Vertex v = solver.dequeue();
-        System.out.println(v.id);
-        solver.printQ();
-        System.out.println("\n");
-        solver.printHeap();
-        System.out.println(solver.count);
-
-        System.out.println("\n");
-        solver.distArray[6] = 0;
-        solver.heapify();
-        solver.printQ();
-        System.out.println("\n");
-        solver.printHeap();
-        System.out.println(solver.count);
-
-        System.out.println("IMPORTANT STUFF");
-        solver.dequeue();
-        Random rand = new Random();
-        for (int i = 0; i < 16; i++) {
-            solver.distArray[i] = rand.nextInt() % 32;
-        }
-        solver.printHeap();
-        solver.printQ();
-        System.out.println();
-        solver.heapify();
-        solver.printHeap();
-        solver.printQ();
-    }
-
     private Vertex[] vertices;
     private double[] distArray;
     private Vertex[] queue;
@@ -74,7 +28,15 @@ public class MazeSolver {
         count = 0;
     }
 
-    public List<Integer> dijkstraSolve(int from, int to) {
+    /**
+     * Takes from and to nodes and finds the shortest path between the two using
+     * Dijkstra's algorithm.
+     * @param from
+     * @param to
+     * @param option
+     * @return 
+     */
+    public List<Integer> dijkstraSolve(int from, int to, String option) {
         List<List<Integer>> paths;
         distArray = new double[vertices.length];
         queue = new Vertex[vertices.length];
@@ -82,6 +44,9 @@ public class MazeSolver {
 
         for (Vertex v : vertices) {
             Vertex copy = new Vertex(v);
+            if (option.equals("unweighted")) {
+                copy.setWeights(1);
+            }
             enqueue(copy, Double.POSITIVE_INFINITY);
         }
         distArray[from - 1] = 0;
@@ -93,7 +58,7 @@ public class MazeSolver {
         }
 
         Vertex u;
-        int n= 0;
+        int n = 0;
         while (count > 0) {
             n++;
             u = dequeue();
@@ -150,25 +115,25 @@ public class MazeSolver {
         queue[last] = root;
         last--;
 
-        int i = 0;
         int firstLeaf = (last / 2);
-        while (i < firstLeaf) {
-            if (getDist(queue[i]) > getDist(queue[(2 * i) + 1])) {
-                int childI = (2 * i) + 1;
-                Vertex temp = queue[i];
-                queue[i] = queue[childI];
-                queue[childI] = temp;
-                i = childI;
-            } else if (getDist(queue[i]) > getDist(queue[(2 * i) + 2])) {
-                int childI = (2 * i) + 2;
-                Vertex temp = queue[i];
-                queue[i] = queue[childI];
-                queue[childI] = temp;
-                i = childI;
+        int n = 0;
+        while (n < firstLeaf) {
+            double lChildDist = getDist(queue[(2 * n) + 1]);
+            double rChildDist = getDist(queue[(2 * n) + 2]);
+            double nodeDist = getDist(queue[n]);
+            int litChildPos = (lChildDist < rChildDist) ? (2 * n) + 1 : (2 * n) + 2;
+            double litChildDist = getDist(queue[litChildPos]);
+
+            if (nodeDist > litChildDist) {
+                Vertex temp = queue[n];
+                queue[n] = queue[litChildPos];
+                queue[litChildPos] = temp;
+                n = litChildPos;
             } else {
                 break;
             }
         }
+
         count--;
         return (root);
     }
