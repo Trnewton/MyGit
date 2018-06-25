@@ -21,6 +21,7 @@ public class Vertex {
     public Vertex(Vertex copy){
         id = copy.id;
         adjacent = copy.adjacent;
+        count = copy.count;
     }
     
     public void addAdj(int vertexID, int weight){

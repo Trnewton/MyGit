@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 
@@ -19,16 +20,25 @@ import javax.swing.JFrame;
  * @author thomasnewton
  */
 public class hw4 {
+
+    private static MazeVisualizer visual;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        JFrame f = new JFrame("MazeVisualizer");
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
         MazeSolver solver;
-        MazeVisualizer visual = null;
+        visual = null;
         String option = null;
         String maze_file = null;
-        String query_file;
-        
+        String query_file = null;
+
         try {
             option = args[0];
             maze_file = args[1];
@@ -39,11 +49,48 @@ public class hw4 {
             System.out.println(e.toString());
             System.exit(0);
         }
-        solver = new MazeSolver(readMaze(maze_file, visual));
-        
+
+        solver = new MazeSolver(readMaze(maze_file));
+        BufferedReader input_query = null;
+        try {
+            input_query = new BufferedReader(new FileReader(query_file));
+            String line = input_query.readLine();
+            while (line != null) {
+                String[] words = line.split("\t");
+                int from, to;
+                from = Integer.parseInt(words[0]);
+                to = Integer.parseInt(words[1]);
+                List<Integer> list = solver.dijkstraSolve(from, to);
+                for(Integer val: list){
+                System.out.println(val+1);
+                }
+                System.out.println();
+                visual.addPath(list);
+                line = input_query.readLine();
+            }
+        } catch (Exception e) {
+            // System.out.println("ERROR Performing Query\n" + e.toString());
+            e.printStackTrace();
+            System.exit(0);
+        } finally {
+            if (input_query != null) {
+                try {
+                    input_query.close();
+                } catch (Exception e) {
+                    System.out.println("ERROR:Problem closing file \n" + e.toString());
+                    System.exit(0);
+                }
+            }
+        }
+        f.getContentPane().add("Center", visual);
+        visual.init();
+        f.pack();
+        f.setBackground(Color.WHITE);
+        f.setSize(new Dimension(512, 512));
+        f.setVisible(true);
     }
 
-    private static Vertex[] readMaze(String maze_file, MazeVisualizer visual) {
+    private static Vertex[] readMaze(String maze_file) {
         Vertex[] vertices = null;
         BufferedReader input_maze = null;
         try {
@@ -52,25 +99,11 @@ public class hw4 {
             String[] words = line.split(" ");
             int n = Integer.parseInt(words[0]);
             visual = new MazeVisualizer(n);
-            n = (int) Math.pow(n, 2);
+            n = n * n;
             vertices = new Vertex[n];
             for (int i = 0; i < n; i++) {
                 vertices[i] = new Vertex(i);
             }
-            //<editor-fold defaultstate="collapsed" desc="Window Init">
-            JFrame f = new JFrame("MazeVisualizer");
-            f.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    System.exit(0);
-                }
-            });
-            f.getContentPane().add("Center", visual);
-            visual.init();
-            f.pack();
-            f.setBackground(Color.WHITE);
-            f.setSize(new Dimension(512, 512));
-            f.setVisible(true);
-//</editor-fold>
 
             line = input_maze.readLine();
             while (line != null) {
@@ -80,14 +113,14 @@ public class hw4 {
                 to = Integer.parseInt(words[1]);
                 weight = Integer.parseInt(words[2]);
                 visual.addEdge(from, to);
-                vertices[from-1].addAdj(to, weight);
+                vertices[from - 1].addAdj(to - 1, weight);
                 line = input_maze.readLine();
             }
         } catch (Exception e) {
             System.out.println("ERROR:File Reader \n" + e.toString());
             System.exit(0);
         } finally {
-            if(input_maze != null){
+            if (input_maze != null) {
                 try {
                     input_maze.close();
                 } catch (Exception e) {
@@ -96,8 +129,7 @@ public class hw4 {
                 }
             }
         }
-        return(vertices);
+        return (vertices);
     }
 
-    
 }
