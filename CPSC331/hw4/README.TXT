@@ -7,7 +7,7 @@ Application that calculates and displays the shortest path between two nodes in 
 
 	java -jar "hw4.jar" option maze-file query-file
 
-where option = weighted/unweighted. The maze is generated from the maze-file, which should start with a number indicating the number of nodes on one side of the square, and then each following line is of the form:
+where option = "weighted" or "unweighted". The maze is generated from the maze-file, which should start with a number indicating the number of nodes on one side of the square, and then each following line is of the form:
 
 	<fromVertex>\t<toVertex> <weight>
 
