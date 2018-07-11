@@ -1,0 +1,49 @@
+Script started on 2018-05-23 15:25:43-0600
+]0;thomas.newton@csa3:~/CPSC355thomas.newton@csa3:~/CPSC355$ gdb sa[K[Kassign1b
+GNU gdb (GDB) Fedora 8.0-13.fc26
+Copyright (C) 2017 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "aarch64-redhat-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from assign1b...done.
+(gdb) display/i $pc
+1: x/i $pc
+<error: No registers.>
+(gdb) b 62
+Breakpoint 1 at 0x400654: file assign1b.s, line 62.
+(gdb) r
+Starting program: /home/ugd/thomas.newton/CPSC355/assign1b 
+ x  |  y  |  max 
+------------------
+ -4 | -422 | -422
+ -3 | -173 | -173
+ -2 | -38 | -38
+ -1 | 13 | 13
+ 0 | 10 | 13
+ 1 | -17 | 13
+ 2 | -38 | 13
+ 3 | -23 | 13
+
+Breakpoint 1, check () at assign1b.s:63
+63		ldp  x29, x30, [sp], 16
+1: x/i $pc
+=> 0x400654 <check+8>:	ldp	x29, x30, [sp], #16
+(gdb) p $21x21
+$1 = 13
+(gdb) ni[K[Kc
+Continuing.
+[Inferior 1 (process 1579) exited with code 016]
+(gdb) q
+]0;thomas.newton@csa3:~/CPSC355thomas.newton@csa3:~/CPSC355$ exit
+exit
+
+Script done on 2018-05-23 15:26:28-0600

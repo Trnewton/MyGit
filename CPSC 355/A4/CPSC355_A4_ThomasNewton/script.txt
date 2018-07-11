@@ -1,0 +1,80 @@
+Script started on 2018-06-14 21:04:11-0600
+]0;thomas.newton@csa2:~/CPSC355/A4thomas.newton@csa2:~/CPSC355/A4$ exitgcc -g assign4.s -o assign4[17P./assign4 gcc -g assign4.s -o assign4[17P./assign4 gcc -g assign4.s -o assign4exit[K[Kexitgcc -g assign4.s -o assign4[17P./assign4 gcc -g assign4.s -o assign4[2Pm4 assign4.asm >assign4.sgcc -g assign4.s -o assign4[2Pm4 assign4.asm >assign4.sgcc -g assign4.s -o assign4[17P./assign4 gcc -g assign4.s -o assign4exit[K[Kgdb assign4
+GNU gdb (GDB) Fedora 8.0-13.fc26
+Copyright (C) 2017 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "aarch64-redhat-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from assign4...done.
+(gdb) displa.[Ky/i $pc
+1: x/i $pc
+<error: No registers.>
+(gdb) b 169
+Breakpoint 1 at 0x400794: file assign4.s, line 169.
+(gdb) b 193
+Breakpoint 2 at 0x4007e0: file assign4.s, line 193.
+(gdb) b noteq
+Breakpoint 3 at 0x4007ec: file assign4.s, line 197.
+(gdb) r
+Starting program: /home/ugd/thomas.newton/CPSC355/A4/assign4 
+
+Breakpoint 1, main () at assign4.s:169
+169		adrp	x0, pint				// Load print string
+1: x/i $pc
+=> 0x400794 <main+56>:	adrp	x0, 0x400000
+(gdb) x/2w $x29+16[1P[1@4[1P[1@5
+0xfffffffff110:	0	0	1	1
+0xfffffffff120:	1
+(gdb) x/5w $x29+16[K[K48
+0xfffffffff130:	0	0	1	1
+0xfffffffff140:	1
+(gdb) c
+Continuing.
+Initial box values:
+Box first origin = (0, 0) width = 1 height = 1 area = 1
+Box second origin = (0, 0) width = 1 height = 1 area = 1
+
+Breakpoint 2, main () at assign4.s:193
+193		add	x0, x29, -(-(8 + 8 + 4 + 16) & -16)				// Add second pointer into x0
+1: x/i $pc
+=> 0x4007e0 <main+132>:	add	x0, x29, #0x30
+(gdb) cx/5w $x29+48164816
+0xfffffffff110:	-5	7	1	1
+0xfffffffff120:	1
+(gdb) x/5w $x29+16[C[C[C[C[C[Cc[Kx/5w $x29+48
+0xfffffffff130:	0	0	1	1
+0xfffffffff140:	1
+(gdb) c
+Continuing.
+
+Breakpoint 3, noteq () at assign4.s:197
+197	noteq:	adrp	x0, pchg				// Load print string into x0
+1: x/i $pc
+=> 0x4007ec <noteq>:	adrp	x0, 0x400000
+(gdb) cx/5w $x29+4816
+0xfffffffff110:	-5	7	1	1
+0xfffffffff120:	1
+(gdb) x/5w $x29+16[C[C[C[C[C[Cc[Kx/5w $x29+48
+0xfffffffff130:	0	0	3	3
+0xfffffffff140:	9
+(gdb) c
+Continuing.
+
+Changed box values:
+Box first origin = (-5, 7) width = 1 height = 1 area = 1
+Box second origin = (0, 0) width = 3 height = 3 area = 9
+[Inferior 1 (process 16098) exited normally]
+(gdb) quit[K[K[K
+]0;thomas.newton@csa2:~/CPSC355/A4thomas.newton@csa2:~/CPSC355/A4$ exit
+exit
+
+Script done on 2018-06-14 21:12:09-0600

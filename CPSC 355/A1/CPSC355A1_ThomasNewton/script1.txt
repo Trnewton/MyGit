@@ -1,0 +1,155 @@
+Script started on 2018-05-23 15:01:11-0600
+]0;thomas.newton@csa3:~/CPSC355thomas.newton@csa3:~/CPSC355$ gdb assign1a
+GNU gdb (GDB) Fedora 8.0-13.fc26
+Copyright (C) 2017 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "aarch64-redhat-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from assign1a...done.
+(gdb) display/i $pc
+1: x/i $pc
+<error: No registers.>
+(gdb) b check
+Breakpoint 1 at 0x400608: file assign1a.s, line 28.
+(gdb) r
+Starting program: /home/ugd/thomas.newton/CPSC355/assign1a 
+ x  |  y  |  max 
+------------------
+
+Breakpoint 1, check () at assign1a.s:28
+28	check:	subs	XZR, X19, #3		// Check to see if current x value is out of upper bound 
+1: x/i $pc
+=> 0x400608 <check>:	cmp	x19, #0x3
+(gdb) p @[K$x19
+$1 = -4
+(gdb) p $x19[K[K20
+$2 = -9999
+(gdb) p $x201920[K[K22
+$3 = 5
+(gdb) p $x22[K1
+$4 = 4195488
+(gdb) ni
+29		bgt	break			// Break out of loop if x value is out of upper bound
+1: x/i $pc
+=> 0x40060c <check+4>:	b.gt	0x400654 <break>
+(gdb) ni
+calc () at assign1a.s:31
+31	calc:	mul	X9, X19, X22		// X9 = 5x
+1: x/i $pc
+=> 0x400610 <calc>:	mul	x9, x19, x22
+(gdb) ni
+32		sub	X9, X9, #12		// X9 = 5x - 12
+1: x/i $pc
+=> 0x400614 <calc+4>:	sub	x9, x9, #0xc
+(gdb) p $x9
+$5 = -20
+(gdb) p $x9[3Pni
+33		mul	X9, X9, X19		// X9 = 5x^2 - 12x
+1: x/i $pc
+=> 0x400618 <calc+8>:	mul	x9, x9, x19
+(gdb) nip $x9
+$6 = -32
+(gdb) p $x9[3Pni
+34		sub	X9, X9, #20		// X9 = 5x^2 - 12x - 20
+1: x/i $pc
+=> 0x40061c <calc+12>:	sub	x9, x9, #0x14
+(gdb) nip $x9
+$7 = 128
+(gdb) p $x9[3Pni
+35		mul	X9, X9, X19		// X9 = 5x^3 - 12x^2 - 20x
+1: x/i $pc
+=> 0x400620 <calc+16>:	mul	x9, x9, x19
+(gdb) nip $x9
+$8 = 108
+(gdb) p $x9[3Pni
+36		add	X21, X9, #10		// X21 = y = 5x^3 - 12^2 - 20x + 10
+1: x/i $pc
+=> 0x400624 <calc+20>:	add	x21, x9, #0xa
+(gdb) nip $x9
+$9 = -432
+(gdb) p $x9[3Pni
+38		subs	XZR, X20, X21		// See if term is bigger than old max
+1: x/i $pc
+=> 0x400628 <calc+24>:	cmp	x20, x21
+(gdb) p 4[K$x21
+$10 = -422
+(gdb) ni
+39		bge	print			// Skip over line if not a new max
+1: x/i $pc
+=> 0x40062c <calc+28>:	b.ge	0x400634 <print>  // b.tcont
+(gdb) ni
+40		mov	X20, X21		// X20 has the new maximum value
+1: x/i $pc
+=> 0x400630 <calc+32>:	mov	x20, x21
+(gdb) ni
+print () at assign1a.s:42
+42	print:	adrp	X0, str			// Set higher bits of format string for printf
+1: x/i $pc
+=> 0x400634 <print>:	adrp	x0, 0x400000
+(gdb) p $x21[K0
+$11 = -422
+(gdb) ni
+43		add 	X0, x0, :lo12:str	// Set lower bits of format string for printf
+1: x/i $pc
+=> 0x400638 <print+4>:	add	x0, x0, #0x5cb
+(gdb) ni
+44		mov	X1, X19			// Set 1st magic number for printf
+1: x/i $pc
+=> 0x40063c <print+8>:	mov	x1, x19
+(gdb) ni
+45		mov	X2, X21			// Set 2nd magic number for printf
+1: x/i $pc
+=> 0x400640 <print+12>:	mov	x2, x21
+(gdb) ni
+46		mov	X3, X20			// Set 3rd magic number for printf
+1: x/i $pc
+=> 0x400644 <print+16>:	mov	x3, x20
+(gdb) ni
+47		bl	printf			// Execute printf
+1: x/i $pc
+=> 0x400648 <print+20>:	bl	0x400490 <printf@plt>
+(gdb) ni
+ -4 | -422 | -422
+49		add	X19, X19, #1		// Increment x value by 1
+1: x/i $pc
+=> 0x40064c <print+24>:	add	x19, x19, #0x1
+(gdb) ni
+50		B	check			// Return to top of loop 
+1: x/i $pc
+=> 0x400650 <print+28>:	b	0x400608 <check>
+(gdb) p $x19
+$12 = -3
+(gdb) ni
+
+Breakpoint 1, check () at assign1a.s:28
+28	check:	subs	XZR, X19, #3		// Check to see if current x value is out of upper bound 
+1: x/i $pc
+=> 0x400608 <check>:	cmp	x19, #0x3
+(gdb) ni
+29		bgt	break			// Break out of loop if x value is out of upper bound
+1: x/i $pc
+=> 0x40060c <check+4>:	b.gt	0x400654 <break>
+(gdb) ni
+calc () at assign1a.s:31
+31	calc:	mul	X9, X19, X22		// X9 = 5x
+1: x/i $pc
+=> 0x400610 <calc>:	mul	x9, x19, x22
+(gdb) q
+A debugging session is active.
+
+	Inferior 1 [process 32722] will be killed.
+
+Quit anyway? (y or n) y
+]0;thomas.newton@csa3:~/CPSC355thomas.newton@csa3:~/CPSC355$ exit
+exit
+
+Script done on 2018-05-23 15:05:35-0600

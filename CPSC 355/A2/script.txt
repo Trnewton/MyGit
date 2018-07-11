@@ -1,0 +1,226 @@
+Script started on 2018-05-31 22:32:52-0600
+]0;thomas.newton@csa2:~/CPSC355/A2thomas.newton@csa2:~/CPSC355/A2$ exitgdb assign2a
+GNU gdb (GDB) Fedora 8.0-13.fc26
+Copyright (C) 2017 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "aarch64-redhat-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from assign2a...done.
+(gdb) display/i $pc
+1: x/i $pc
+<error: No registers.>
+(gdb) b 23[K[K30
+Breakpoint 1 at 0x400628: file assign2a.s, line 30.
+(gdb) r
+Starting program: /home/ugd/thomas.newton/CPSC355/A2/assign2a 
+
+Breakpoint 1, main () at assign2a.s:31
+31		MOV	W20, -559087616		// 
+1: x/i $pc
+=> 0x400628 <main+8>:	mov	w20, #0xdead0000            	// #-559087616
+(gdb) no[Ki[K[Kni
+32		MOV	W21, 40			// 
+1: x/i $pc
+=> 0x40062c <main+12>:	mov	w21, #0x28                  	// #40
+(gdb) ni
+33		MOV	W22, 0				// 
+1: x/i $pc
+=> 0x400630 <main+16>:	mov	w22, #0x0                   	// #0
+(gdb) ni
+34		MOV	W24, 0				// 
+1: x/i $pc
+=> 0x400634 <main+20>:	mov	w24, #0x0                   	// #0
+(gdb) ni
+37		ADRP	x0, init			// 
+1: x/i $pc
+=> 0x400638 <main+24>:	adrp	x0, 0x400000
+(gdb) b 45
+Breakpoint 2 at 0x400654: file assign2a.s, line 45.
+(gdb) c
+Continuing.
+multiplier = 0x00000028 (40) multiplicand = 0xdead0000 (-559087616)
+
+
+Breakpoint 2, main () at assign2a.s:46
+46		CMN	W21, 0			// Compare W21 to zero
+1: x/i $pc
+=> 0x400654 <main+52>:	cmn	w21, #0x0
+(gdb) ni
+47		BMI	isneg				// Branch if W21 is negative
+1: x/i $pc
+=> 0x400658 <main+56>:	b.mi	0x400664 <isneg>  // b.first
+(gdb) ni
+48		MOV	w23, 0			// Set w23 to false(0)
+1: x/i $pc
+=> 0x40065c <main+60>:	mov	w23, #0x0                   	// #0
+(gdb) ni
+49		B	loop				// Skip over setting w23 to true(1)
+1: x/i $pc
+=> 0x400660 <main+64>:	b	0x400668 <loop>
+(gdb) p $w23
+$1 = 0
+(gdb) b loop
+Breakpoint 3 at 0x400668: file assign2a.s, line 53.
+(gdb) c
+Continuing.
+
+Breakpoint 3, loop () at assign2a.s:53
+53	loop:	TST	W21, 0x1			// Test if least significant bit(lsb) is 0 or 1
+1: x/i $pc
+=> 0x400668 <loop>:	tst	w21, #0x1
+(gdb) ni
+54		BEQ	noadd				// Skip the addition step if lsb is 0
+1: x/i $pc
+=> 0x40066c <loop+4>:	b.eq	0x400674 <noadd>  // b.none
+(gdb) ni
+noadd () at assign2a.s:58
+58	noadd:	ASR	W21, W21, 1			// Arithmatic shift right W21 by 1
+1: x/i $pc
+=> 0x400674 <noadd>:	asr	w21, w21, #1
+(gdb) p/d (int)$w21
+$2 = 40
+(gdb) ni
+59		TST	W22, 0x1			// Test if lsb is 0 or 1
+1: x/i $pc
+=> 0x400678 <noadd+4>:	tst	w22, #0x1
+(gdb) nip/d (int)$w21
+$3 = 20
+(gdb) ni
+60		BEQ	else				// Skip to else branch if lsb is 0
+1: x/i $pc
+=> 0x40067c <noadd+8>:	b.eq	0x400688 <else>  // b.none
+(gdb) ni
+else () at assign2a.s:64
+64	else:	AND	W21, W21, 0x7FFFFFFF	// Bitmask W21 with 0x7FFFFFFF
+1: x/i $pc
+=> 0x400688 <else>:	and	w21, w21, #0x7fffffff
+(gdb) p/d (int)$w21
+$4 = 20
+(gdb) ni
+after () at assign2a.s:65
+65	after:	ASR	W22, W22, 1			// Arithmetric shift right W22 by 1
+1: x/i $pc
+=> 0x40068c <after>:	asr	w22, w22, #1
+(gdb) nip/d (int)$w21
+$5 = 20
+(gdb) p/d (int)$w21[K2
+$6 = 0
+(gdb) ni
+66		ADD	W24, W24, 1				// Increment W24 by 1
+1: x/i $pc
+=> 0x400690 <after+4>:	add	w24, w24, #0x1
+(gdb) p/[K $w22[K3[K4
+$7 = 0
+(gdb) ni
+67		CMP	W24, 32				// Check to see if W24 is greater than 32
+1: x/i $pc
+=> 0x400694 <after+8>:	cmp	w24, #0x20
+(gdb) nip $w24
+$8 = 1
+(gdb) ni
+68		BLT	loop				// Restart loop if W24 is less than 32
+1: x/i $pc
+=> 0x400698 <after+12>:	b.lt	0x400668 <loop>  // b.tstop
+(gdb) b71 [K[K[K 71
+Breakpoint 4 at 0x40069c: file assign2a.s, line 71.
+(gdb) ni
+
+Breakpoint 3, loop () at assign2a.s:53
+53	loop:	TST	W21, 0x1			// Test if least significant bit(lsb) is 0 or 1
+1: x/i $pc
+=> 0x400668 <loop>:	tst	w21, #0x1
+(gdb) c
+Continuing.
+
+Breakpoint 3, loop () at assign2a.s:53
+53	loop:	TST	W21, 0x1			// Test if least significant bit(lsb) is 0 or 1
+1: x/i $pc
+=> 0x400668 <loop>:	tst	w21, #0x1
+(gdb) clear loop
+Deleted breakpoint 3 
+(gdb) c
+Continuing.
+
+Breakpoint 4, after () at assign2a.s:71
+71		CBZ	w23, skip			// Skip SUBtraction if w23 is equal to zero
+1: x/i $pc
+=> 0x40069c <after+16>:	cbz	w23, 0x4006a4 <skip>
+(gdb) /[Kp/d (int)$w20
+$9 = -559087616
+(gdb) p/d (int)$w20[K1
+$10 = -888668160
+(gdb) p/d (int)$w21[K2
+$11 = -6
+(gdb) p/d (int)$w22[K3
+$12 = 0
+(gdb) p/d (int)$w23[K4
+$13 = 32
+(gdb) ni
+skip () at assign2a.s:75
+75	skip:	ADRP	x0, promul			// 
+1: x/i $pc
+=> 0x4006a4 <skip>:	adrp	x0, 0x400000
+(gdb) b 82
+Breakpoint 5 at 0x4006b8: file assign2a.s, line 82.
+(gdb) c
+Continuing.
+product = 0xfffffffa multiplier = 0xcb080000
+
+Breakpoint 5, skip () at assign2a.s:82
+82		SXTW	x9, W22			// Sign extend the producint into x9
+1: x/i $pc
+=> 0x4006b8 <skip+20>:	sxtw	x9, w22
+(gdb) ni
+83		AND	x9, x9, 0xFFFFFFFF	// Bitmask x9 wuth oxFFFFFFFF
+1: x/i $pc
+=> 0x4006bc <skip+24>:	and	x9, x9, #0xffffffff
+(gdb) p $x9
+$14 = -6
+(gdb) ni
+84		LSL	x9, x9, 32		// Logical shift left x9 by 32
+1: x/i $pc
+=> 0x4006c0 <skip+28>:	lsl	x9, x9, #32
+(gdb) p $x9
+$15 = 4294967290
+(gdb) p $x9[3Pni
+85		SXTW	x10, W21			// Sign extend the multiplier into x10
+1: x/i $pc
+=> 0x4006c4 <skip+32>:	sxtw	x10, w21
+(gdb) nip $x9
+$16 = -25769803776
+(gdb) p $x9[3Pni
+86		AND	x10, x10, 0xFFFFFFFF	// Bitmask x10 with 0xFFFFFFFF
+1: x/i $pc
+=> 0x4006c8 <skip+36>:	and	x10, x10, #0xffffffff
+(gdb) nip $x9[K10
+$17 = -888668160
+(gdb) p $x10[4Pni
+87		ADD	x25, x9, x10		// Add x9 and x10 and store in x25
+1: x/i $pc
+=> 0x4006cc <skip+40>:	add	x25, x9, x10
+(gdb) nip $x10
+$18 = 3406299136
+(gdb) ni
+90		ADRP	x0, fin				// 
+1: x/i $pc
+=> 0x4006d0 <skip+44>:	adrp	x0, 0x400000
+(gdb) x[Kp $x25
+$19 = -22363504640
+(gdb) c
+Continuing.
+64-bit result = 0xfffffffacb080000 (-22363504640)
+[Inferior 1 (process 803) exited normally]
+(gdb) q
+]0;thomas.newton@csa2:~/CPSC355/A2thomas.newton@csa2:~/CPSC355/A2$ exit
+exit
+
+Script done on 2018-05-31 22:43:44-0600
