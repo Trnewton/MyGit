@@ -1,0 +1,23 @@
+Script started on 2018-06-20 21:55:05-0600
+]0;thomas.newton@csa2:~/CPSC355/A5thomas.newton@csa2:~/CPSC355/A5$ ./a5a [K 
+1 2 - 4 5 + * =
+
+-9
+
+4 2 + 6 3 - / =
+
+2
+
+4 0 / =
+zero divisor popped
+
+4
+
+2 * =
+
+8
+
+]0;thomas.newton@csa2:~/CPSC355/A5thomas.newton@csa2:~/CPSC355/A5$ exit
+exit
+
+Script done on 2018-06-20 21:56:47-0600
