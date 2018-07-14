@@ -27,9 +27,9 @@ ungtE:	.string	"ungetch: too many character\n" // Error string to print for unge
 
 	.balign 4
 // push(int f) subroutine (a) 
-define(sp_a, x11)
-define(sp_r, w12)
-define(val_a, x10)
+define(sp_a, x9)
+define(sp_r, w10)
+define(val_a, x11)
 
 	.global	push
 push:	stp	x29, x30, [sp, -16]!		// 
@@ -59,10 +59,6 @@ aRet:	ldp	x29, x30, [sp], 16		//
 
 
 // pop() subroutine (b) 
-define(sp_a, x9)
-define(sp_r, w10)
-define(val_a, x11)
-
 	.global	pop
 pop:	stp	x29, x30, [sp, -16]!		// 
 	mov	x29, sp				// 
@@ -204,8 +200,8 @@ dRet:
 
 // getch() subroutine (e)
 define(bufp_r, w9)
-define(bufp_a, x10)
-define(buf_a, x11) 
+define(bufp_a, x11)
+define(buf_a, x12) 
 
 	.global getch
 getch:	stp	x29, x30, [sp, -16]!		//
@@ -232,8 +228,6 @@ eRet:	ldp	x29, x30, [sp], 16		//
 
 
 // ungetch(int c) subroutine (f)
-define(c_r, w12)
-
 	.global	ungetch
 ungetch:
 	stp	x29, x30, [sp, -16]!		//
